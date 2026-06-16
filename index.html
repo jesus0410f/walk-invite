@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Приглашение на прогулку</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 15px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            background: rgba(25, 25, 45, 0.95);
+            border-radius: 24px;
+            padding: 30px 20px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
+                        0 0 80px rgba(255, 140, 0, 0.2),
+                        0 0 120px rgba(255, 100, 50, 0.15);
+            border: 2px solid rgba(255, 140, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 60%),
+                        radial-gradient(circle at 70% 30%, rgba(255,100,50,0.06) 0%, transparent 60%);
+            animation: rotate 25s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .icon {
+            text-align: center;
+            font-size: 50px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 15px rgba(255,140,0,0.6));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            color: #ff8c00;
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+            text-shadow: 0 0 25px rgba(255,140,0,0.5);
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: #ffb366;
+            text-align: center;
+            font-size: 1em;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .input-group {
+            margin: 25px 0;
+        }
+
+        .input-label {
+            color: #ffb366;
+            font-size: 1em;
+            margin-bottom: 12px;
+            display: block;
+            text-align: center;
+        }
+
+        .time-input {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 1em;
+            background: rgba(40, 40, 65, 0.9);
+            border: 2px solid rgba(255, 140, 0, 0.5);
+            border-radius: 14px;
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+            -webkit-appearance: none;
+            font-family: inherit;
+        }
+
+        .time-input:focus {
+            border-color: #ff8c00;
+            box-shadow: 0 0 25px rgba(255,140,0,0.3);
+            background: rgba(50, 50, 75, 0.95);
+        }
+
+        .time-input::placeholder {
+            color: rgba(255, 179, 102, 0.5);
+            font-size: 0.95em;
+        }
+
+        .examples {
+            color: #ffb366;
+            font-size: 0.8em;
+            margin-top: 10px;
+            opacity: 0.7;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .confirm-btn {
+            background: linear-gradient(135deg, #ff8c00, #ff6347);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 14px;
+            font-size: 1.1em;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            font-weight: 600;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            -webkit-appearance: none;
+            box-shadow: 0 5px 25px rgba(255,140,0,0.3);
+        }
+
+        .confirm-btn:active:not(:disabled) {
+            transform: scale(0.97);
+        }
+
+        .confirm-btn:disabled {
+            opacity: 0.4;
+            box-shadow: none;
+        }
+
+        .decoration {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 20px;
+            opacity: 0.6;
+            letter-spacing: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="icon">🌳</div>
+            <h1>Приглашаю на прогулку!</h1>
+            <p class="subtitle">Выбери удобное время:</p>
+            
+            <div class="input-group">
+                <label class="input-label">🕐 Когда тебе удобно?</label>
+                <input 
+                    type="text" 
+                    class="time-input" 
+                    id="timeInput" 
+                    placeholder="Например: Завтра в 18:00"
+                    autocomplete="off"
+                    inputmode="text"
+                >
+                <div class="examples">
+                    💡 Например: "Сегодня вечером", "В субботу после обеда", "Завтра в 17:30"
+                </div>
+            </div>
+
+            <a class="confirm-btn" id="confirmBtn" disabled>
+                Подтвердить время
+            </a>
+
+            <div class="decoration">🌿 ☀️ 🌿</div>
+        </div>
+    </div>
+
+    <script>
+        const timeInput = document.getElementById('timeInput');
+        const confirmBtn = document.getElementById('confirmBtn');
+
+        timeInput.addEventListener('input', function() {
+            if (this.value.trim().length > 0) {
+                confirmBtn.disabled = false;
+                confirmBtn.style.opacity = '1';
+            } else {
+                confirmBtn.disabled = true;
+                confirmBtn.style.opacity = '0.4';
+            }
+        });
+
+        timeInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !confirmBtn.disabled) {
+                e.preventDefault();
+                goToNextPage();
+            }
+        });
+
+        confirmBtn.addEventListener('click', function(e) {
+            if (confirmBtn.disabled) {
+                e.preventDefault();
+                return;
+            }
+            e.preventDefault();
+            goToNextPage();
+        });
+
+        function goToNextPage() {
+            const selectedTime = timeInput.value.trim();
+            if (!selectedTime) return;
+            
+            const encodedTime = encodeURIComponent(selectedTime);
+            window.location.href = 'meeting-walk.html?time=' + encodedTime;
+        }
+
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                timeInput.focus();
+            }, 300);
+        });
+    </script>
+</body>
+</html>
