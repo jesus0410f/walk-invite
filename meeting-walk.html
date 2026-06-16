@@ -109,9 +109,12 @@
             <div class="icon">🌳</div>
             <div class="meeting-text">До встречи!</div>
             <div class="chosen-time" id="chosenTimeDisplay"></div>
-            <div class="email-sent">
-                ✅ Я уже получил уведомление!
-            </div>
+           <div class="email-sent" id="emailStatus">
+    ✅ Я уже получил уведомление!
+</div>
+<button id="manualSendBtn" style="display:none; background: #ff8c00; color: white; border: none; padding: 14px 24px; border-radius: 14px; font-size: 1em; margin-top: 15px; width: 100%; cursor: pointer;">
+    📩 Отправить вручную
+</button>
             <div class="decoration">🌿 ☀️ 🌿</div>
         </div>
     </div>
@@ -139,8 +142,28 @@
             document.getElementById('formMessage').value = `🌳 Время прогулки: "${decodedTime}"\n\nДата выбора: ${new Date().toLocaleString('ru-RU')}`;
             
             const form = document.getElementById('emailForm');
-            form.target = 'hiddenFrame';
-            form.submit();
+form.target = 'hiddenFrame';
+
+form.addEventListener('submit', function() {
+    form.dataset.sent = 'true';
+});
+
+setTimeout(() => {
+    form.submit();
+    
+    setTimeout(() => {
+        if (!form.dataset.sent) {
+            document.getElementById('emailStatus').innerHTML = '⚠️ Автоотправка не сработала';
+            const btn = document.getElementById('manualSendBtn');
+            btn.style.display = 'block';
+            btn.addEventListener('click', function() {
+                form.submit();
+                document.getElementById('emailStatus').innerHTML = '✅ Отправлено!';
+                btn.style.display = 'none';
+            });
+        }
+    }, 2000);
+}, 500);
         } else {
             document.getElementById('chosenTimeDisplay').textContent = '🕐 Время не указано';
         }
