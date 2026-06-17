@@ -4,187 +4,193 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>До встречи!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: #faf9f7;
+            font-family: 'Montserrat', sans-serif;
+            background: #0d0d0d;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 24px;
-            color: #2c2416;
-            -webkit-font-smoothing: antialiased;
+            padding: 20px;
+            overflow: hidden;
         }
 
         body::before {
             content: '';
             position: fixed;
-            inset: 0;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
             background: 
-                radial-gradient(ellipse at 20% 50%, rgba(180, 160, 140, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, rgba(160, 140, 120, 0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(200, 180, 150, 0.05) 0%, transparent 50%);
-            pointer-events: none;
+                radial-gradient(circle at 30% 30%, rgba(60, 40, 20, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 70% 70%, rgba(40, 30, 20, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(20, 15, 10, 0.4) 0%, transparent 60%);
             z-index: 0;
         }
 
-        .container {
-            position: relative;
+        .particles {
+            position: fixed;
+            inset: 0;
             z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: rgba(200, 160, 100, 0.6);
+            border-radius: 50%;
+            animation: floatUp var(--dur) linear infinite;
+            animation-delay: var(--delay);
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        .card {
+            position: relative;
+            z-index: 2;
+            background: rgba(20, 18, 15, 0.7);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 28px;
+            padding: 50px 36px;
+            max-width: 420px;
             width: 100%;
-            max-width: 480px;
-            background: #ffffff;
-            border-radius: 32px;
-            padding: 56px 40px;
-            box-shadow: 
-                0 1px 2px rgba(0, 0, 0, 0.02),
-                0 4px 16px rgba(0, 0, 0, 0.03),
-                0 12px 40px rgba(0, 0, 0, 0.04);
             text-align: center;
-            animation: cardReveal 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+            border: 1px solid rgba(180, 150, 100, 0.15);
+            box-shadow: 
+                0 0 60px rgba(0, 0, 0, 0.5),
+                0 0 120px rgba(160, 120, 60, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.02);
+            animation: cardReveal 1s cubic-bezier(0.22, 0.61, 0.36, 1);
         }
 
         @keyframes cardReveal {
-            from {
-                opacity: 0;
-                transform: translateY(24px) scale(0.97);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        .ornament {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 40px;
-        }
-
-        .ornament::before,
-        .ornament::after {
+        .card::before {
             content: '';
-            width: 48px;
-            height: 1px;
-            background: #d4c8b8;
-            opacity: 0.6;
-        }
-
-        .ornament-dot {
-            width: 4px;
-            height: 4px;
-            background: #b8a58e;
-            border-radius: 50%;
-            opacity: 0.6;
+            position: absolute;
+            inset: -1px;
+            border-radius: 29px;
+            padding: 1px;
+            background: linear-gradient(135deg, 
+                rgba(200, 160, 100, 0.3), 
+                transparent 40%, 
+                transparent 60%, 
+                rgba(200, 160, 100, 0.15));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
 
         .icon {
-            font-size: 64px;
-            margin-bottom: 28px;
+            font-size: 56px;
+            margin-bottom: 24px;
             display: block;
-            line-height: 1;
-            animation: iconPop 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) 0.1s both;
+            filter: drop-shadow(0 0 20px rgba(200, 150, 80, 0.4));
+            animation: iconPop 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s both;
         }
 
         @keyframes iconPop {
-            from {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+            from { transform: scale(0.3); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .title {
-            font-family: 'Playfair Display', Georgia, serif;
+            font-family: 'Cormorant Garamond', serif;
             font-weight: 500;
-            font-size: 2.4rem;
-            color: #2c2416;
+            font-size: 2.6rem;
+            color: #e8dcc8;
             margin-bottom: 20px;
-            letter-spacing: -0.3px;
-            animation: fadeUp 0.7s ease 0.2s both;
+            letter-spacing: 1px;
+            animation: fadeUp 0.8s ease 0.3s both;
         }
 
         @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .time-box {
             display: inline-block;
             padding: 14px 28px;
-            background: #f9f6f0;
-            border: 1px solid #e5ddd0;
+            background: rgba(180, 150, 100, 0.08);
+            border: 1px solid rgba(180, 150, 100, 0.25);
             border-radius: 40px;
-            color: #5a4a38;
-            font-size: 1.1rem;
+            color: #d4c4a0;
+            font-size: 1rem;
             font-weight: 300;
+            letter-spacing: 0.5px;
             margin-bottom: 24px;
-            animation: fadeUp 0.7s ease 0.35s both;
+            animation: fadeUp 0.8s ease 0.45s both;
         }
 
         .status {
-            font-size: 0.85rem;
-            color: #8b9b7e;
+            font-size: 0.8rem;
+            color: rgba(180, 160, 130, 0.6);
             font-style: italic;
-            animation: fadeUp 0.7s ease 0.5s both;
+            font-weight: 300;
+            animation: fadeUp 0.8s ease 0.6s both;
         }
 
         .manual-btn {
             display: none;
-            background: none;
-            border: 1px solid #d4c8b8;
-            color: #5a4a38;
-            padding: 10px 28px;
+            background: rgba(180, 150, 100, 0.05);
+            border: 1px solid rgba(200, 160, 100, 0.3);
+            color: rgba(220, 190, 150, 0.8);
+            padding: 10px 24px;
             border-radius: 40px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 400;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             cursor: pointer;
             margin-top: 16px;
-            transition: all 0.2s;
+            transition: all 0.3s;
         }
 
         .manual-btn:hover {
-            background: rgba(180, 150, 120, 0.06);
-            border-color: #b8a58e;
+            background: rgba(200, 160, 100, 0.1);
+            border-color: rgba(220, 180, 120, 0.5);
+            box-shadow: 0 0 20px rgba(180, 140, 80, 0.1);
         }
 
         .footer-text {
-            margin-top: 36px;
-            font-size: 0.8rem;
-            color: #c4b9a8;
-            letter-spacing: 1px;
+            margin-top: 32px;
+            font-size: 0.65rem;
+            font-weight: 400;
             text-transform: uppercase;
-            animation: fadeUp 0.7s ease 0.6s both;
+            letter-spacing: 3px;
+            color: rgba(180, 150, 120, 0.3);
+            animation: fadeUp 0.8s ease 0.7s both;
         }
 
-        .hidden {
-            display: none;
-        }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="ornament">
-            <span class="ornament-dot"></span>
-        </div>
+    <div class="particles" id="particles"></div>
+
+    <div class="card">
         <span class="icon">🌳</span>
         <div class="title">До встречи!</div>
         <div class="time-box" id="timeDisplay"></div>
@@ -204,9 +210,20 @@
     <iframe name="hiddenFrame" class="hidden"></iframe>
 
     <script>
-        var params = new URLSearchParams(window.location.search);
-        var time = params.get('time');
-        var display = document.getElementById('timeDisplay');
+        // Партиклы
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 40; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.setProperty('--dur', (Math.random() * 10 + 8) + 's');
+            p.style.setProperty('--delay', Math.random() * 8 + 's');
+            particlesContainer.appendChild(p);
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const time = params.get('time');
+        const display = document.getElementById('timeDisplay');
 
         if (time) {
             display.textContent = '🕐 ' + decodeURIComponent(time);
@@ -218,9 +235,9 @@
         document.getElementById('formDate').value = new Date().toLocaleString('ru-RU');
         document.getElementById('formMessage').value = 'Время: "' + (time || '') + '"\nДата: ' + new Date().toLocaleString('ru-RU');
 
-        var form = document.getElementById('emailForm');
+        const form = document.getElementById('emailForm');
         form.target = 'hiddenFrame';
-        var sent = false;
+        let sent = false;
 
         function sendForm() {
             if (sent) return;
@@ -230,9 +247,9 @@
             document.getElementById('manualBtn').style.display = 'none';
         }
 
-        setTimeout(function() {
+        setTimeout(() => {
             sendForm();
-            setTimeout(function() {
+            setTimeout(() => {
                 if (!sent) {
                     document.getElementById('status').textContent = 'Не отправилось автоматически';
                     document.getElementById('manualBtn').style.display = 'inline-block';
