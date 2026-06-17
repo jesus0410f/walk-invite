@@ -39,6 +39,72 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             padding: 15px;
             -webkit-font-smoothing: antialiased;
+            overflow: hidden;
+        }
+
+        /* Звёздный фон */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.5); }
+        }
+
+        /* Парящие частицы */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--orange);
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: float-up var(--duration) ease-in infinite;
+            animation-delay: var(--delay);
+            opacity: 0;
+        }
+
+        @keyframes float-up {
+            0% {
+                opacity: 0;
+                transform: translateY(0) translateX(0) scale(0);
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) translateX(var(--drift)) scale(1.5);
+            }
         }
 
         .container {
@@ -47,12 +113,29 @@
             padding: 30px 20px;
             max-width: 400px;
             width: 100%;
-            box-shadow: var(--shadow-warm), var(--shadow-glow), 0 0 120px rgba(255, 100, 50, 0.15);
+            box-shadow: 
+                var(--shadow-warm), 
+                var(--shadow-glow), 
+                0 0 120px rgba(255, 100, 50, 0.15),
+                inset 0 1px 0 rgba(255,255,255,0.05);
             border: 2px solid var(--border-color);
             position: relative;
             overflow: hidden;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
+        .container:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                var(--shadow-warm), 
+                0 0 100px rgba(255, 140, 0, 0.3), 
+                0 0 150px rgba(255, 100, 50, 0.2);
+        }
+
+        /* Анимированная рамка */
         .container::before {
             content: '';
             position: absolute;
@@ -62,6 +145,32 @@
                 radial-gradient(circle at 70% 30%, rgba(255,100,50,0.06) 0%, transparent 60%);
             animation: rotate 25s linear infinite;
             pointer-events: none;
+        }
+
+        /* Светящийся край */
+        .container::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: var(--radius);
+            padding: 2px;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255,140,0,0.3) 50%,
+                transparent 70%
+            );
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: border-glow 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes border-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
         @keyframes rotate {
@@ -85,6 +194,7 @@
             margin-bottom: 15px;
             filter: drop-shadow(0 0 15px rgba(255,140,0,0.6));
             animation: float 3s ease-in-out infinite;
+            cursor: default;
         }
 
         h1 {
@@ -92,8 +202,14 @@
             text-align: center;
             font-size: 1.8em;
             margin-bottom: 5px;
-            text-shadow: 0 0 25px rgba(255,140,0,0.5);
+            text-shadow: 
+                0 0 25px rgba(255,140,0,0.5),
+                0 0 50px rgba(255,140,0,0.2);
             line-height: 1.2;
+            background: linear-gradient(to right, #ff8c00, #ff6347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .subtitle {
@@ -106,6 +222,7 @@
 
         .input-group {
             margin: 25px 0;
+            position: relative;
         }
 
         .input-label {
@@ -129,17 +246,43 @@
             text-align: center;
             -webkit-appearance: none;
             font-family: inherit;
+            position: relative;
         }
 
         .time-input:focus {
             border-color: var(--orange);
-            box-shadow: 0 0 25px rgba(255,140,0,0.3);
+            box-shadow: 
+                0 0 25px rgba(255,140,0,0.3),
+                inset 0 0 15px rgba(255,140,0,0.1);
             background: var(--input-focus-bg);
+            transform: scale(1.02);
         }
 
         .time-input::placeholder {
             color: rgba(255, 179, 102, 0.5);
             font-size: 0.95em;
+        }
+
+        /* Пульсирующая точка у инпута */
+        .input-group::after {
+            content: '';
+            position: absolute;
+            bottom: 20px;
+            left: 15px;
+            width: 8px;
+            height: 8px;
+            background: var(--orange);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(255,140,0,0.7);
+            }
+            50% { 
+                box-shadow: 0 0 0 15px rgba(255,140,0,0);
+            }
         }
 
         .examples {
@@ -164,8 +307,46 @@
             margin-top: 20px;
             font-weight: 600;
             -webkit-appearance: none;
-            box-shadow: 0 5px 25px rgba(255,140,0,0.3);
+            box-shadow: 
+                0 5px 25px rgba(255,140,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.2);
             font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Блик на кнопке */
+        .confirm-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,0.2),
+                transparent
+            );
+            transition: left 0.5s;
+        }
+
+        .confirm-btn:hover:not(:disabled)::before {
+            left: 100%;
+        }
+
+        .confirm-btn:not(:disabled) {
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { 
+                box-shadow: 0 5px 25px rgba(255,140,0,0.3);
+            }
+            50% { 
+                box-shadow: 0 5px 40px rgba(255,140,0,0.6);
+            }
         }
 
         .confirm-btn:active:not(:disabled) {
@@ -176,6 +357,7 @@
             opacity: 0.4;
             box-shadow: none;
             cursor: not-allowed;
+            animation: none;
         }
 
         .decoration {
@@ -184,10 +366,18 @@
             margin-top: 20px;
             opacity: 0.6;
             letter-spacing: 8px;
+            animation: float 4s ease-in-out infinite;
+            animation-delay: 1s;
         }
     </style>
 </head>
 <body>
+    <!-- Звёзды -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Парящие частицы -->
+    <div class="particles" id="particles"></div>
+
     <div class="container">
         <div class="content">
             <div class="icon">🌳</div>
@@ -211,7 +401,7 @@
             </div>
 
             <button class="confirm-btn" id="confirmBtn" disabled aria-label="Подтвердить выбранное время">
-                Подтвердить время
+                Подтвердить время ✨
             </button>
 
             <div class="decoration">🌿 ☀️ 🌿</div>
@@ -219,6 +409,45 @@
     </div>
 
     <script>
+        // Генерация звёзд
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const count = 50;
+            
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = (Math.random() * 3 + 1) + 'px';
+                star.style.height = star.style.width;
+                star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+                star.style.setProperty('--delay', Math.random() * 3 + 's');
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Генерация частиц
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const count = 15;
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.bottom = '0';
+                particle.style.setProperty('--duration', (Math.random() * 5 + 5) + 's');
+                particle.style.setProperty('--delay', Math.random() * 5 + 's');
+                particle.style.setProperty('--drift', (Math.random() * 100 - 50) + 'px');
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createStars();
+        createParticles();
+
+        // Логика формы
         (function() {
             const timeInput = document.getElementById('timeInput');
             const confirmBtn = document.getElementById('confirmBtn');
@@ -236,10 +465,7 @@
                 window.location.href = `meeting-walk.html?time=${encodedTime}`;
             }
 
-            // Обработчик ввода
             timeInput.addEventListener('input', updateButtonState);
-
-            // Обработчик клавиш
             timeInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter' && !confirmBtn.disabled) {
                     e.preventDefault();
@@ -247,7 +473,6 @@
                 }
             });
 
-            // Обработчик клика
             confirmBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (!confirmBtn.disabled) {
@@ -255,7 +480,6 @@
                 }
             });
 
-            // Автофокус при загрузке
             window.addEventListener('load', () => {
                 setTimeout(() => timeInput.focus(), 300);
             });
