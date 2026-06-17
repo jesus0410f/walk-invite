@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Приглашение на прогулку</title>
     <style>
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-accent: #0f3460;
+            --orange: #ff8c00;
+            --orange-light: #ffb366;
+            --orange-red: #ff6347;
+            --card-bg: rgba(25, 25, 45, 0.95);
+            --input-bg: rgba(40, 40, 65, 0.9);
+            --input-focus-bg: rgba(50, 50, 75, 0.95);
+            --shadow-glow: 0 0 80px rgba(255, 140, 0, 0.2);
+            --shadow-warm: 0 20px 50px rgba(0, 0, 0, 0.4);
+            --border-color: rgba(255, 140, 0, 0.5);
+            --radius: 24px;
+            --radius-sm: 14px;
+            --transition: 0.3s ease;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,7 +31,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary), var(--bg-accent));
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -24,15 +42,13 @@
         }
 
         .container {
-            background: rgba(25, 25, 45, 0.95);
-            border-radius: 24px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
             padding: 30px 20px;
             max-width: 400px;
             width: 100%;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
-                        0 0 80px rgba(255, 140, 0, 0.2),
-                        0 0 120px rgba(255, 100, 50, 0.15);
-            border: 2px solid rgba(255, 140, 0, 0.5);
+            box-shadow: var(--shadow-warm), var(--shadow-glow), 0 0 120px rgba(255, 100, 50, 0.15);
+            border: 2px solid var(--border-color);
             position: relative;
             overflow: hidden;
         }
@@ -40,18 +56,22 @@
         .container::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 60%),
-                        radial-gradient(circle at 70% 30%, rgba(255,100,50,0.06) 0%, transparent 60%);
+            inset: -50%;
+            background: 
+                radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 60%),
+                radial-gradient(circle at 70% 30%, rgba(255,100,50,0.06) 0%, transparent 60%);
             animation: rotate 25s linear infinite;
+            pointer-events: none;
         }
 
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .content {
@@ -67,13 +87,8 @@
             animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
         h1 {
-            color: #ff8c00;
+            color: var(--orange);
             text-align: center;
             font-size: 1.8em;
             margin-bottom: 5px;
@@ -82,7 +97,7 @@
         }
 
         .subtitle {
-            color: #ffb366;
+            color: var(--orange-light);
             text-align: center;
             font-size: 1em;
             margin-bottom: 25px;
@@ -94,7 +109,7 @@
         }
 
         .input-label {
-            color: #ffb366;
+            color: var(--orange-light);
             font-size: 1em;
             margin-bottom: 12px;
             display: block;
@@ -105,21 +120,21 @@
             width: 100%;
             padding: 14px 18px;
             font-size: 1em;
-            background: rgba(40, 40, 65, 0.9);
-            border: 2px solid rgba(255, 140, 0, 0.5);
-            border-radius: 14px;
+            background: var(--input-bg);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
             color: white;
             outline: none;
-            transition: all 0.3s ease;
+            transition: all var(--transition);
             text-align: center;
             -webkit-appearance: none;
             font-family: inherit;
         }
 
         .time-input:focus {
-            border-color: #ff8c00;
+            border-color: var(--orange);
             box-shadow: 0 0 25px rgba(255,140,0,0.3);
-            background: rgba(50, 50, 75, 0.95);
+            background: var(--input-focus-bg);
         }
 
         .time-input::placeholder {
@@ -128,7 +143,7 @@
         }
 
         .examples {
-            color: #ffb366;
+            color: var(--orange-light);
             font-size: 0.8em;
             margin-top: 10px;
             opacity: 0.7;
@@ -137,22 +152,20 @@
         }
 
         .confirm-btn {
-            background: linear-gradient(135deg, #ff8c00, #ff6347);
+            background: linear-gradient(135deg, var(--orange), var(--orange-red));
             color: white;
             border: none;
             padding: 15px;
-            border-radius: 14px;
+            border-radius: var(--radius-sm);
             font-size: 1.1em;
             cursor: pointer;
             width: 100%;
-            transition: all 0.3s ease;
+            transition: all var(--transition);
             margin-top: 20px;
             font-weight: 600;
-            text-decoration: none;
-            display: block;
-            text-align: center;
             -webkit-appearance: none;
             box-shadow: 0 5px 25px rgba(255,140,0,0.3);
+            font-family: inherit;
         }
 
         .confirm-btn:active:not(:disabled) {
@@ -162,6 +175,7 @@
         .confirm-btn:disabled {
             opacity: 0.4;
             box-shadow: none;
+            cursor: not-allowed;
         }
 
         .decoration {
@@ -181,7 +195,7 @@
             <p class="subtitle">Выбери удобное время:</p>
             
             <div class="input-group">
-                <label class="input-label">🕐 Когда тебе удобно?</label>
+                <label class="input-label" for="timeInput">🕐 Когда тебе удобно?</label>
                 <input 
                     type="text" 
                     class="time-input" 
@@ -189,63 +203,63 @@
                     placeholder="Например: Завтра в 18:00"
                     autocomplete="off"
                     inputmode="text"
+                    aria-label="Введите удобное время для прогулки"
                 >
                 <div class="examples">
                     💡 Например: "Сегодня вечером", "В субботу после обеда", "Завтра в 17:30"
                 </div>
             </div>
 
-            <a class="confirm-btn" id="confirmBtn" disabled>
+            <button class="confirm-btn" id="confirmBtn" disabled aria-label="Подтвердить выбранное время">
                 Подтвердить время
-            </a>
+            </button>
 
             <div class="decoration">🌿 ☀️ 🌿</div>
         </div>
     </div>
 
     <script>
-        const timeInput = document.getElementById('timeInput');
-        const confirmBtn = document.getElementById('confirmBtn');
+        (function() {
+            const timeInput = document.getElementById('timeInput');
+            const confirmBtn = document.getElementById('confirmBtn');
 
-        timeInput.addEventListener('input', function() {
-            if (this.value.trim().length > 0) {
-                confirmBtn.disabled = false;
-                confirmBtn.style.opacity = '1';
-            } else {
-                confirmBtn.disabled = true;
-                confirmBtn.style.opacity = '0.4';
+            function updateButtonState() {
+                const hasValue = timeInput.value.trim().length > 0;
+                confirmBtn.disabled = !hasValue;
             }
-        });
 
-        timeInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !confirmBtn.disabled) {
+            function goToNextPage() {
+                const selectedTime = timeInput.value.trim();
+                if (!selectedTime) return;
+                
+                const encodedTime = encodeURIComponent(selectedTime);
+                window.location.href = `meeting-walk.html?time=${encodedTime}`;
+            }
+
+            // Обработчик ввода
+            timeInput.addEventListener('input', updateButtonState);
+
+            // Обработчик клавиш
+            timeInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !confirmBtn.disabled) {
+                    e.preventDefault();
+                    goToNextPage();
+                }
+            });
+
+            // Обработчик клика
+            confirmBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                goToNextPage();
-            }
-        });
+                if (!confirmBtn.disabled) {
+                    goToNextPage();
+                }
+            });
 
-        confirmBtn.addEventListener('click', function(e) {
-            if (confirmBtn.disabled) {
-                e.preventDefault();
-                return;
-            }
-            e.preventDefault();
-            goToNextPage();
-        });
-
-        function goToNextPage() {
-            const selectedTime = timeInput.value.trim();
-            if (!selectedTime) return;
-            
-            const encodedTime = encodeURIComponent(selectedTime);
-            window.location.href = 'meeting-walk.html?time=' + encodedTime;
-        }
-
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                timeInput.focus();
-            }, 300);
-        });
+            // Автофокус при загрузке
+            window.addEventListener('load', () => {
+                setTimeout(() => timeInput.focus(), 300);
+            });
+        })();
     </script>
 </body>
 </html>
