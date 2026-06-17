@@ -3,355 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>До встречи! 🌳</title>
+    <title>До встречи!</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background: #faf8f5;
+            font-family: Georgia, 'Times New Roman', serif;
+            background: #f7f5f0;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            position: relative;
-            overflow-x: hidden;
         }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
-                radial-gradient(ellipse at 30% 20%, rgba(210, 180, 140, 0.12) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 60%, rgba(180, 160, 130, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(200, 170, 120, 0.06) 0%, transparent 50%);
-            z-index: 0;
-        }
-
-        .bg-lines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.04;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 40px,
-                #8b7355 40px,
-                #8b7355 41px
-            );
-            pointer-events: none;
-        }
-
         .card {
-            position: relative;
-            z-index: 1;
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px);
+            background: #ffffff;
             border-radius: 24px;
-            padding: 50px 35px;
-            max-width: 440px;
+            padding: 48px 32px;
+            max-width: 400px;
             width: 100%;
-            box-shadow: 
-                0 4px 30px rgba(0, 0, 0, 0.04),
-                0 1px 3px rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(180, 160, 130, 0.2);
             text-align: center;
-            animation: cardAppear 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+            box-shadow: 0 2px 24px rgba(0,0,0,0.04);
+            border: 1px solid #e8e0d5;
+            animation: appear 0.7s ease;
         }
-
-        @keyframes cardAppear {
-            0% {
-                opacity: 0;
-                transform: translateY(20px) scale(0.96);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        .decorative-line {
-            width: 40px;
+        .line {
+            width: 32px;
             height: 1px;
             background: #c4a97d;
-            margin: 0 auto 30px;
+            margin: 0 auto 28px;
             opacity: 0.5;
         }
-
         .icon {
             font-size: 64px;
-            margin-bottom: 24px;
-            display: inline-block;
-            animation: celebrateIcon 0.8s cubic-bezier(0.22, 0.61, 0.36, 1), gentleFloat 3s ease-in-out 0.8s infinite;
-        }
-
-        @keyframes celebrateIcon {
-            0% {
-                transform: scale(0.3) rotate(-30deg);
-                opacity: 0;
-            }
-            60% {
-                transform: scale(1.15) rotate(5deg);
-            }
-            100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 1;
-            }
-        }
-
-        @keyframes gentleFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .success-title {
-            font-family: 'Georgia', serif;
-            font-weight: 400;
-            font-size: 2.4rem;
-            color: #3d3226;
             margin-bottom: 20px;
-            letter-spacing: -0.5px;
-            animation: fadeInUp 0.6s ease-out 0.3s both;
         }
-
-        @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .title {
+            font-size: 2.2rem;
+            color: #3d3226;
+            font-weight: 400;
+            margin-bottom: 18px;
         }
-
-        .time-display {
+        .time-box {
             display: inline-block;
-            padding: 12px 28px;
-            background: rgba(196, 169, 125, 0.08);
-            border: 1px solid rgba(196, 169, 125, 0.25);
-            border-radius: 40px;
-            font-size: 1.1rem;
+            padding: 10px 24px;
+            background: #f9f6f0;
+            border: 1px solid #e5ddd0;
+            border-radius: 30px;
             color: #5a4a38;
-            margin: 10px 0 24px;
-            animation: fadeInUp 0.6s ease-out 0.5s both;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
         }
-
-        .status-msg {
+        .status {
             color: #7a9a7a;
-            font-size: 0.95rem;
-            margin: 8px 0;
+            font-size: 0.9rem;
             font-style: italic;
-            animation: fadeInUp 0.6s ease-out 0.7s both;
         }
-
-        .manual-send {
+        .manual-btn {
             display: none;
             background: none;
             border: 1px solid #c4a97d;
             color: #5a4a38;
-            padding: 10px 24px;
-            border-radius: 40px;
-            font-family: 'Georgia', serif;
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-family: inherit;
             font-size: 0.9rem;
-            margin-top: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            margin-top: 12px;
         }
-
-        .manual-send:hover {
-            background: rgba(196, 169, 125, 0.1);
-            transform: translateY(-1px);
+        .manual-btn:hover {
+            background: rgba(196,169,125,0.06);
         }
-
-        .manual-send:active {
-            transform: translateY(0);
-        }
-
-        .footer-note {
-            margin-top: 32px;
-            font-size: 0.85rem;
+        .footer {
+            margin-top: 28px;
             color: #c4b9a8;
+            font-size: 0.85rem;
             font-style: italic;
-            letter-spacing: 0.5px;
         }
-
-        .footer-note span {
-            display: inline-block;
-            margin: 0 6px;
-            animation: gentleFloat 3s ease-in-out infinite;
-        }
-
-        .footer-note span:nth-child(2) {
-            animation-delay: 0.5s;
-        }
-
-        .footer-note span:nth-child(3) {
-            animation-delay: 1s;
-        }
-
-        /* Конфетти */
-        .confetti-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .confetti-piece {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            border-radius: 2px;
-            animation: confettiFall var(--dur) linear infinite;
-            animation-delay: var(--delay);
-            opacity: 0;
-        }
-
-        @keyframes confettiFall {
-            0% {
-                transform: translateY(-10vh) rotate(0deg);
-                opacity: 1;
-            }
-            80% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(110vh) rotate(var(--rot));
-                opacity: 0;
-            }
-        }
-
-        /* Скрытая форма */
-        .hidden-form {
+        .hidden {
             display: none;
         }
     </style>
 </head>
 <body>
-    <div class="bg-lines"></div>
-    <div class="confetti-container" id="confettiContainer"></div>
-
     <div class="card">
-        <div class="decorative-line"></div>
+        <div class="line"></div>
         <div class="icon">🌳</div>
-        <div class="success-title">До встречи!</div>
-        <div class="time-display" id="chosenTimeDisplay"></div>
-        <div class="status-msg" id="emailStatus">✓ Я уже получил уведомление</div>
-        <button class="manual-send" id="manualSendBtn">📩 Отправить вручную</button>
-        <div class="footer-note">
-            <span>🌿</span>
-            <span>☀️</span>
-            <span>🌿</span>
-        </div>
+        <div class="title">До встречи!</div>
+        <div class="time-box" id="timeDisplay"></div>
+        <div class="status" id="status">✓ Уведомление отправлено</div>
+        <button class="manual-btn" id="manualBtn">Отправить вручную</button>
+        <div class="footer">🌿 ☀️ 🌿</div>
     </div>
-
-    <!-- Скрытая форма для FormSubmit -->
-    <form class="hidden-form" id="emailForm" action="https://formsubmit.co/oleg.zanedelev@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="🌳 Время прогулки выбрано!">
+    <form class="hidden" id="emailForm" action="https://formsubmit.co/oleg.zanedelev@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="Время прогулки выбрано">
         <input type="hidden" name="_captcha" value="false">
         <input type="text" name="time" id="formTime">
         <input type="text" name="date" id="formDate">
         <input type="text" name="message" id="formMessage">
     </form>
-
-    <iframe name="hiddenFrame" style="display:none;"></iframe>
-
+    <iframe name="hiddenFrame" class="hidden"></iframe>
     <script>
-        (function() {
-            // Конфетти
-            function createConfetti() {
-                const container = document.getElementById('confettiContainer');
-                const colors = [
-                    '#c4a97d', '#d4c4a8', '#b8a28c', 
-                    '#a89880', '#d9cdb3', '#e5d9c5',
-                    '#8b7355', '#c9b896'
-                ];
-                
-                for (let i = 0; i < 50; i++) {
-                    const piece = document.createElement('div');
-                    piece.className = 'confetti-piece';
-                    piece.style.left = Math.random() * 100 + '%';
-                    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-                    piece.style.width = (Math.random() * 8 + 4) + 'px';
-                    piece.style.height = (Math.random() * 8 + 4) + 'px';
-                    piece.style.setProperty('--dur', (Math.random() * 4 + 5) + 's');
-                    piece.style.setProperty('--delay', Math.random() * 4 + 's');
-                    piece.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
-                    
-                    if (Math.random() > 0.5) {
-                        piece.style.borderRadius = '50%';
-                    }
-                    
-                    container.appendChild(piece);
+        var params = new URLSearchParams(window.location.search);
+        var time = params.get('time');
+        var display = document.getElementById('timeDisplay');
+        if (time) {
+            display.textContent = '🕐 ' + decodeURIComponent(time);
+        } else {
+            display.textContent = 'Время не указано';
+        }
+        document.getElementById('formTime').value = time || '';
+        document.getElementById('formDate').value = new Date().toLocaleString('ru-RU');
+        document.getElementById('formMessage').value = 'Время: "' + (time || '') + '"\nДата: ' + new Date().toLocaleString('ru-RU');
+        var form = document.getElementById('emailForm');
+        form.target = 'hiddenFrame';
+        var sent = false;
+        function sendForm() {
+            if (sent) return;
+            sent = true;
+            form.submit();
+            document.getElementById('status').textContent = '✓ Отправлено';
+            document.getElementById('manualBtn').style.display = 'none';
+        }
+        setTimeout(function() {
+            sendForm();
+            setTimeout(function() {
+                if (!sent) {
+                    document.getElementById('status').textContent = '⚠ Не отправилось автоматически';
+                    document.getElementById('manualBtn').style.display = 'inline-block';
                 }
-            }
-
-            createConfetti();
-
-            // Логика отправки
-            const urlParams = new URLSearchParams(window.location.search);
-            const timeFromUrl = urlParams.get('time');
-            const chosenTimeDisplay = document.getElementById('chosenTimeDisplay');
-            const emailStatus = document.getElementById('emailStatus');
-            const manualBtn = document.getElementById('manualSendBtn');
-            const emailForm = document.getElementById('emailForm');
-
-            if (!timeFromUrl) {
-                chosenTimeDisplay.textContent = '🕐 Время не указано';
-                return;
-            }
-
-            const decodedTime = decodeURIComponent(timeFromUrl);
-            chosenTimeDisplay.textContent = `🕐 ${decodedTime}`;
-
-            // Заполняем скрытую форму
-            document.getElementById('formTime').value = decodedTime;
-            document.getElementById('formDate').value = new Date().toLocaleString('ru-RU');
-            document.getElementById('formMessage').value = 
-                `🌳 Время: "${decodedTime}"\n📅 Дата запроса: ${new Date().toLocaleString('ru-RU')}`;
-
-            emailForm.target = 'hiddenFrame';
-            let isSent = false;
-
-            function submitForm() {
-                if (isSent) return;
-                isSent = true;
-                emailForm.submit();
-                emailStatus.innerHTML = '✓ Отправлено!';
-                manualBtn.style.display = 'none';
-            }
-
-            // Автоотправка
-            setTimeout(() => {
-                submitForm();
-                // Если через 3 секунды не отправилось — показываем кнопку
-                setTimeout(() => {
-                    if (!isSent) {
-                        emailStatus.innerHTML = '⚠️ Не отправилось автоматически';
-                        manualBtn.style.display = 'inline-block';
-                    }
-                }, 3000);
-            }, 500);
-
-            manualBtn.addEventListener('click', submitForm);
-        })();
+            }, 3000);
+        }, 500);
+        document.getElementById('manualBtn').addEventListener('click', sendForm);
     </script>
 </body>
 </html>
