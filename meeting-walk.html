@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>До встречи! 🌳</title>
     <style>
-        :root {
-            --orange: #ff8c00;
-            --orange-light: #ffb366;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -17,192 +12,125 @@
         }
 
         body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: #faf8f5;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            padding: 15px;
-            background: #0a0a1a;
-            overflow: hidden;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        .animated-bg {
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(210, 180, 140, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 60%, rgba(180, 160, 130, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(200, 170, 120, 0.06) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .bg-lines {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 0;
-            background: linear-gradient(45deg, #1a1a0a, #1a0a0a, #0a1a0a, #0a0a1a);
-            background-size: 400% 400%;
-            animation: gradientShift 10s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Фейерверки */
-        .firework {
-            position: fixed;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .spark {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            animation: sparkBurst 1.5s ease-out forwards;
-        }
-
-        @keyframes sparkBurst {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--tx), var(--ty)) scale(0);
-                opacity: 0;
-            }
-        }
-
-        /* Конфетти */
-        .confetti-piece {
-            position: fixed;
-            pointer-events: none;
-            z-index: 3;
-            animation: confettiFall var(--duration) linear infinite;
-            animation-delay: var(--delay);
-        }
-
-        @keyframes confettiFall {
-            0% {
-                transform: translateY(-10vh) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(110vh) rotate(var(--spin));
-                opacity: 0;
-            }
-        }
-
-        .container {
-            background: rgba(20, 20, 40, 0.85);
-            border-radius: 30px;
-            padding: 40px 25px;
-            max-width: 420px;
-            width: 100%;
-            position: relative;
-            z-index: 10;
-            border: 1px solid rgba(255, 140, 0, 0.3);
-            box-shadow: 
-                0 0 50px rgba(255, 140, 0, 0.3),
-                0 0 100px rgba(255, 100, 0, 0.15),
-                0 20px 60px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(20px);
-            text-align: center;
-            animation: cardPopIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes cardPopIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.8) translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .glow-border {
-            position: absolute;
-            inset: -3px;
-            border-radius: 33px;
-            padding: 3px;
-            background: conic-gradient(
-                from 0deg,
+            opacity: 0.04;
+            background: repeating-linear-gradient(
+                0deg,
                 transparent,
-                rgba(255, 140, 0, 0.6),
-                rgba(255, 200, 0, 0.6),
-                rgba(255, 140, 0, 0.6),
-                transparent
+                transparent 40px,
+                #8b7355 40px,
+                #8b7355 41px
             );
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            animation: spinGlow 4s linear infinite;
             pointer-events: none;
         }
 
-        @keyframes spinGlow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .content {
+        .card {
             position: relative;
             z-index: 1;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 50px 35px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 
+                0 4px 30px rgba(0, 0, 0, 0.04),
+                0 1px 3px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(180, 160, 130, 0.2);
+            text-align: center;
+            animation: cardAppear 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        @keyframes cardAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.96);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .decorative-line {
+            width: 40px;
+            height: 1px;
+            background: #c4a97d;
+            margin: 0 auto 30px;
+            opacity: 0.5;
         }
 
         .icon {
-            font-size: 70px;
+            font-size: 64px;
+            margin-bottom: 24px;
             display: inline-block;
-            animation: celebrateIcon 0.8s ease-out, floatIcon 3s ease-in-out 0.8s infinite;
-            filter: drop-shadow(0 0 30px rgba(255, 140, 0, 0.8));
+            animation: celebrateIcon 0.8s cubic-bezier(0.22, 0.61, 0.36, 1), gentleFloat 3s ease-in-out 0.8s infinite;
         }
 
         @keyframes celebrateIcon {
-            0% { transform: scale(0) rotate(-180deg); }
-            60% { transform: scale(1.3) rotate(10deg); }
-            100% { transform: scale(1) rotate(0deg); }
+            0% {
+                transform: scale(0.3) rotate(-30deg);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.15) rotate(5deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
         }
 
-        @keyframes floatIcon {
+        @keyframes gentleFloat {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-8px); }
         }
 
-        .meeting-text {
-            font-size: 2.5em;
-            font-weight: 900;
-            margin: 20px 0;
-            background: linear-gradient(to right, #ffffff, #ffb366, #ff8c00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: none;
-            animation: textShine 2s ease-in-out infinite;
+        .success-title {
+            font-family: 'Georgia', serif;
+            font-weight: 400;
+            font-size: 2.4rem;
+            color: #3d3226;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
         }
 
-        @keyframes textShine {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.3); }
-        }
-
-        .chosen-time {
-            color: #ffb366;
-            font-size: 1.3em;
-            margin: 15px 0;
-            padding: 15px 25px;
-            background: rgba(255, 140, 0, 0.1);
-            border-radius: 15px;
-            display: inline-block;
-            border: 1px solid rgba(255, 140, 0, 0.3);
-            backdrop-filter: blur(10px);
-            animation: fadeSlideUp 0.6s ease-out 0.5s both;
-        }
-
-        @keyframes fadeSlideUp {
+        @keyframes fadeInUp {
             0% {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(15px);
             }
             100% {
                 opacity: 1;
@@ -210,81 +138,132 @@
             }
         }
 
-        .email-status {
-            color: #7fff7f;
-            font-size: 1em;
-            margin-top: 25px;
-            padding: 12px 20px;
-            background: rgba(0, 255, 0, 0.1);
-            border-radius: 12px;
+        .time-display {
             display: inline-block;
-            animation: fadeSlideUp 0.6s ease-out 0.7s both;
+            padding: 12px 28px;
+            background: rgba(196, 169, 125, 0.08);
+            border: 1px solid rgba(196, 169, 125, 0.25);
+            border-radius: 40px;
+            font-size: 1.1rem;
+            color: #5a4a38;
+            margin: 10px 0 24px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
         }
 
-        .manual-btn {
+        .status-msg {
+            color: #7a9a7a;
+            font-size: 0.95rem;
+            margin: 8px 0;
+            font-style: italic;
+            animation: fadeInUp 0.6s ease-out 0.7s both;
+        }
+
+        .manual-send {
             display: none;
-            background: linear-gradient(135deg, #ff8c00, #ff4500);
-            color: white;
-            border: none;
-            padding: 16px 30px;
-            border-radius: 16px;
-            font-size: 1.1em;
-            margin-top: 20px;
-            width: 100%;
+            background: none;
+            border: 1px solid #c4a97d;
+            color: #5a4a38;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-family: 'Georgia', serif;
+            font-size: 0.9rem;
+            margin-top: 16px;
             cursor: pointer;
-            font-family: inherit;
-            font-weight: 700;
-            box-shadow: 0 8px 30px rgba(255, 69, 0, 0.4);
             transition: all 0.3s ease;
         }
 
-        .manual-btn:active {
-            transform: scale(0.95);
+        .manual-send:hover {
+            background: rgba(196, 169, 125, 0.1);
+            transform: translateY(-1px);
         }
 
-        .decoration {
-            font-size: 28px;
-            margin-top: 25px;
-            opacity: 0.6;
-            letter-spacing: 12px;
+        .manual-send:active {
+            transform: translateY(0);
         }
 
-        .decoration span {
+        .footer-note {
+            margin-top: 32px;
+            font-size: 0.85rem;
+            color: #c4b9a8;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-note span {
             display: inline-block;
-            animation: floatDecor 3s ease-in-out infinite;
+            margin: 0 6px;
+            animation: gentleFloat 3s ease-in-out infinite;
         }
 
-        .decoration span:nth-child(2) { animation-delay: 0.4s; }
-        .decoration span:nth-child(3) { animation-delay: 0.8s; }
+        .footer-note span:nth-child(2) {
+            animation-delay: 0.5s;
+        }
 
-        @keyframes floatDecor {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
+        .footer-note span:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        /* Конфетти */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 2px;
+            animation: confettiFall var(--dur) linear infinite;
+            animation-delay: var(--delay);
+            opacity: 0;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 1;
+            }
+            80% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(110vh) rotate(var(--rot));
+                opacity: 0;
+            }
+        }
+
+        /* Скрытая форма */
+        .hidden-form {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="animated-bg"></div>
-    <div id="fireworksContainer"></div>
-    <div id="confettiContainer"></div>
+    <div class="bg-lines"></div>
+    <div class="confetti-container" id="confettiContainer"></div>
 
-    <div class="container">
-        <div class="glow-border"></div>
-        <div class="content">
-            <div class="icon">🌳</div>
-            <div class="meeting-text">До встречи!</div>
-            <div class="chosen-time" id="chosenTimeDisplay"></div>
-            <div class="email-status" id="emailStatus">✅ Я уже получил уведомление!</div>
-            <button class="manual-btn" id="manualSendBtn">📩 Отправить вручную</button>
-            <div class="decoration">
-                <span>🌿</span>
-                <span>☀️</span>
-                <span>🌿</span>
-            </div>
+    <div class="card">
+        <div class="decorative-line"></div>
+        <div class="icon">🌳</div>
+        <div class="success-title">До встречи!</div>
+        <div class="time-display" id="chosenTimeDisplay"></div>
+        <div class="status-msg" id="emailStatus">✓ Я уже получил уведомление</div>
+        <button class="manual-send" id="manualSendBtn">📩 Отправить вручную</button>
+        <div class="footer-note">
+            <span>🌿</span>
+            <span>☀️</span>
+            <span>🌿</span>
         </div>
     </div>
 
-    <form id="emailForm" action="https://formsubmit.co/oleg.zanedelev@gmail.com" method="POST" style="display:none;">
+    <!-- Скрытая форма для FormSubmit -->
+    <form class="hidden-form" id="emailForm" action="https://formsubmit.co/oleg.zanedelev@gmail.com" method="POST">
         <input type="hidden" name="_subject" value="🌳 Время прогулки выбрано!">
         <input type="hidden" name="_captcha" value="false">
         <input type="text" name="time" id="formTime">
@@ -295,72 +274,38 @@
     <iframe name="hiddenFrame" style="display:none;"></iframe>
 
     <script>
-        // Фейерверки
-        function createFirework(x, y) {
-            const colors = ['#ff8c00', '#ff6347', '#ffd700', '#ff4500', '#ff1493', '#00ff7f', '#ffb366'];
-            const container = document.getElementById('fireworksContainer');
-            
-            for (let i = 0; i < 30; i++) {
-                const spark = document.createElement('div');
-                spark.className = 'spark';
-                spark.style.left = x + 'px';
-                spark.style.top = y + 'px';
-                spark.style.background = colors[Math.floor(Math.random() * colors.length)];
-                
-                const angle = (Math.PI * 2 * i) / 30;
-                const distance = 50 + Math.random() * 100;
-                spark.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
-                spark.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
-                
-                container.appendChild(spark);
-                
-                setTimeout(() => spark.remove(), 1500);
-            }
-        }
-
-        // Запуск фейерверков
-        function launchFireworks() {
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => {
-                    const x = Math.random() * window.innerWidth;
-                    const y = Math.random() * window.innerHeight * 0.6;
-                    createFirework(x, y);
-                }, i * 600);
-            }
-        }
-
-        // Конфетти
-        function createConfetti() {
-            const colors = ['#ff8c00', '#ff6347', '#ffd700', '#ff4500', '#ff1493', '#ffb366', '#ff69b4', '#00ff7f'];
-            const container = document.getElementById('confettiContainer');
-            
-            for (let i = 0; i < 60; i++) {
-                const piece = document.createElement('div');
-                piece.className = 'confetti-piece';
-                piece.style.left = Math.random() * 100 + '%';
-                piece.style.width = (Math.random() * 10 + 5) + 'px';
-                piece.style.height = (Math.random() * 10 + 5) + 'px';
-                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-                piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-                piece.style.setProperty('--duration', (Math.random() * 3 + 4) + 's');
-                piece.style.setProperty('--delay', Math.random() * 3 + 's');
-                piece.style.setProperty('--spin', (Math.random() * 720 - 360) + 'deg');
-                container.appendChild(piece);
-            }
-        }
-
-        launchFireworks();
-        createConfetti();
-
-        // Повторяем фейерверки
-        setInterval(() => {
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight * 0.5;
-            createFirework(x, y);
-        }, 3000);
-
-        // Логика отправки
         (function() {
+            // Конфетти
+            function createConfetti() {
+                const container = document.getElementById('confettiContainer');
+                const colors = [
+                    '#c4a97d', '#d4c4a8', '#b8a28c', 
+                    '#a89880', '#d9cdb3', '#e5d9c5',
+                    '#8b7355', '#c9b896'
+                ];
+                
+                for (let i = 0; i < 50; i++) {
+                    const piece = document.createElement('div');
+                    piece.className = 'confetti-piece';
+                    piece.style.left = Math.random() * 100 + '%';
+                    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    piece.style.width = (Math.random() * 8 + 4) + 'px';
+                    piece.style.height = (Math.random() * 8 + 4) + 'px';
+                    piece.style.setProperty('--dur', (Math.random() * 4 + 5) + 's');
+                    piece.style.setProperty('--delay', Math.random() * 4 + 's');
+                    piece.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+                    
+                    if (Math.random() > 0.5) {
+                        piece.style.borderRadius = '50%';
+                    }
+                    
+                    container.appendChild(piece);
+                }
+            }
+
+            createConfetti();
+
+            // Логика отправки
             const urlParams = new URLSearchParams(window.location.search);
             const timeFromUrl = urlParams.get('time');
             const chosenTimeDisplay = document.getElementById('chosenTimeDisplay');
@@ -376,9 +321,11 @@
             const decodedTime = decodeURIComponent(timeFromUrl);
             chosenTimeDisplay.textContent = `🕐 ${decodedTime}`;
 
+            // Заполняем скрытую форму
             document.getElementById('formTime').value = decodedTime;
             document.getElementById('formDate').value = new Date().toLocaleString('ru-RU');
-            document.getElementById('formMessage').value = `🌳 Время: "${decodedTime}"\nДата: ${new Date().toLocaleString('ru-RU')}`;
+            document.getElementById('formMessage').value = 
+                `🌳 Время: "${decodedTime}"\n📅 Дата запроса: ${new Date().toLocaleString('ru-RU')}`;
 
             emailForm.target = 'hiddenFrame';
             let isSent = false;
@@ -387,16 +334,18 @@
                 if (isSent) return;
                 isSent = true;
                 emailForm.submit();
-                emailStatus.innerHTML = '✅ Отправлено!';
+                emailStatus.innerHTML = '✓ Отправлено!';
                 manualBtn.style.display = 'none';
             }
 
+            // Автоотправка
             setTimeout(() => {
                 submitForm();
+                // Если через 3 секунды не отправилось — показываем кнопку
                 setTimeout(() => {
                     if (!isSent) {
                         emailStatus.innerHTML = '⚠️ Не отправилось автоматически';
-                        manualBtn.style.display = 'block';
+                        manualBtn.style.display = 'inline-block';
                     }
                 }, 3000);
             }, 500);
