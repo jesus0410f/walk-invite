@@ -32,6 +32,62 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             padding: 15px;
             -webkit-font-smoothing: antialiased;
+            overflow: hidden;
+        }
+
+        /* Звёзды */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.5); }
+        }
+
+        /* Конфетти */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confetti-fall var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100%) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
         }
 
         .container {
@@ -40,20 +96,64 @@
             padding: 35px 20px;
             max-width: 400px;
             width: 100%;
-            box-shadow: var(--shadow-warm), var(--shadow-glow);
+            box-shadow: 
+                var(--shadow-warm), 
+                var(--shadow-glow),
+                inset 0 1px 0 rgba(255,255,255,0.05);
             border: 2px solid var(--border-color);
             position: relative;
             overflow: hidden;
             text-align: center;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+            animation: card-appear 0.8s ease-out;
+        }
+
+        @keyframes card-appear {
+            0% {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .container::before {
             content: '';
             position: absolute;
             inset: -50%;
-            background: radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 60%);
+            background: 
+                radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 60%),
+                radial-gradient(circle at 30% 70%, rgba(255,200,0,0.05) 0%, transparent 50%);
             animation: rotate 25s linear infinite;
             pointer-events: none;
+        }
+
+        .container::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: var(--radius);
+            padding: 2px;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255,140,0,0.3) 50%,
+                transparent 70%
+            );
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: border-glow 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes border-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
         @keyframes rotate {
@@ -66,6 +166,12 @@
             50% { transform: translateY(-10px); }
         }
 
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
         .content {
             position: relative;
             z-index: 1;
@@ -75,15 +181,34 @@
             font-size: 55px;
             margin-bottom: 15px;
             filter: drop-shadow(0 0 15px rgba(255,140,0,0.6));
-            animation: float 3s ease-in-out infinite;
+            animation: celebrate 0.6s ease-out 0.3s, float 3s ease-in-out 1s infinite;
+            display: inline-block;
         }
 
         .meeting-text {
             color: white;
             font-size: 2em;
             margin: 15px 0;
-            text-shadow: 0 0 20px rgba(255,140,0,0.5);
+            text-shadow: 
+                0 0 20px rgba(255,140,0,0.5),
+                0 0 40px rgba(255,140,0,0.2);
             font-weight: bold;
+            animation: fade-in-up 0.6s ease-out 0.5s both;
+            background: linear-gradient(to right, #ffffff, #ffb366);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes fade-in-up {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .chosen-time {
@@ -94,6 +219,9 @@
             padding: 10px 20px;
             border-radius: var(--radius-sm);
             display: inline-block;
+            animation: fade-in-up 0.6s ease-out 0.7s both;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,140,0,0.2);
         }
 
         .email-status {
@@ -102,6 +230,7 @@
             margin-top: 20px;
             opacity: 0.9;
             transition: all 0.3s ease;
+            animation: fade-in-up 0.6s ease-out 0.9s both;
         }
 
         .manual-btn {
@@ -117,6 +246,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: inherit;
+            box-shadow: 0 5px 20px rgba(255,140,0,0.3);
         }
 
         .manual-btn:active {
@@ -128,10 +258,18 @@
             margin-top: 15px;
             opacity: 0.7;
             letter-spacing: 8px;
+            animation: float 4s ease-in-out infinite;
+            animation-delay: 1.2s;
         }
     </style>
 </head>
 <body>
+    <!-- Звёзды -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Конфетти -->
+    <div class="confetti-container" id="confetti"></div>
+
     <div class="container">
         <div class="content">
             <div class="icon">🌳</div>
@@ -143,7 +281,7 @@
         </div>
     </div>
 
-    <!-- Скрытая форма для отправки -->
+    <!-- Скрытая форма -->
     <form id="emailForm" 
           action="https://formsubmit.co/oleg.zanedelev@gmail.com" 
           method="POST" 
@@ -158,6 +296,49 @@
     <iframe name="hiddenFrame" style="display:none;" aria-hidden="true"></iframe>
 
     <script>
+        // Генерация звёзд
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const count = 50;
+            
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = (Math.random() * 3 + 1) + 'px';
+                star.style.height = star.style.width;
+                star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+                star.style.setProperty('--delay', Math.random() * 3 + 's');
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Генерация конфетти
+        function createConfetti() {
+            const confettiContainer = document.getElementById('confetti');
+            const colors = ['#ff8c00', '#ff6347', '#ffb366', '#ffd700', '#ff4500', '#ff1493', '#00ff7f'];
+            const count = 50;
+            
+            for (let i = 0; i < count; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = -(Math.random() * 20) + '%';
+                confetti.style.width = (Math.random() * 8 + 4) + 'px';
+                confetti.style.height = (Math.random() * 8 + 4) + 'px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                confetti.style.setProperty('--duration', (Math.random() * 3 + 3) + 's');
+                confetti.style.setProperty('--delay', Math.random() * 2 + 's');
+                confettiContainer.appendChild(confetti);
+            }
+        }
+
+        createStars();
+        createConfetti();
+
+        // Логика отправки
         (function() {
             const urlParams = new URLSearchParams(window.location.search);
             const timeFromUrl = urlParams.get('time');
@@ -178,13 +359,11 @@
             const decodedTime = decodeURIComponent(timeFromUrl);
             chosenTimeDisplay.textContent = `🕐 ${decodedTime}`;
 
-            // Заполняем форму
             const currentDate = new Date().toLocaleString('ru-RU');
             formTime.value = decodedTime;
             formDate.value = currentDate;
             formMessage.value = `🌳 Время прогулки: "${decodedTime}"\n\nДата выбора: ${currentDate}`;
 
-            // Настройка отправки через iframe
             emailForm.target = 'hiddenFrame';
             let isSent = false;
             let autoSendTimeout;
@@ -196,14 +375,11 @@
                 emailStatus.innerHTML = '✅ Отправлено!';
                 manualBtn.style.display = 'none';
                 
-                // Сохраняем в localStorage на случай проблем с email
                 try {
                     const sentTimes = JSON.parse(localStorage.getItem('walkTimes') || '[]');
                     sentTimes.push({ time: decodedTime, date: currentDate });
                     localStorage.setItem('walkTimes', JSON.stringify(sentTimes));
-                } catch (e) {
-                    // localStorage недоступен
-                }
+                } catch (e) {}
             }
 
             function showManualButton() {
@@ -213,27 +389,15 @@
                 }
             }
 
-            // Пытаемся отправить автоматически
             autoSendTimeout = setTimeout(() => {
                 submitForm();
-                
-                // Если через 3 секунды не получили подтверждение
                 setTimeout(() => {
-                    if (!isSent) {
-                        showManualButton();
-                    }
+                    if (!isSent) showManualButton();
                 }, 3000);
             }, 500);
 
-            // Ручная отправка
-            manualBtn.addEventListener('click', () => {
-                submitForm();
-            });
-
-            // Очистка таймаута при уходе со страницы
-            window.addEventListener('beforeunload', () => {
-                clearTimeout(autoSendTimeout);
-            });
+            manualBtn.addEventListener('click', submitForm);
+            window.addEventListener('beforeunload', () => clearTimeout(autoSendTimeout));
         })();
     </script>
 </body>
