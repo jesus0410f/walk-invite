@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>До встречи!</title>
     <style>
+        :root {
+            --orange: #ff8c00;
+            --orange-light: #ffb366;
+            --card-bg: rgba(25, 25, 45, 0.95);
+            --shadow-warm: 0 20px 50px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 80px rgba(255, 140, 0, 0.2);
+            --border-color: rgba(255, 140, 0, 0.5);
+            --radius: 24px;
+            --radius-sm: 12px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -24,14 +35,13 @@
         }
 
         .container {
-            background: rgba(25, 25, 45, 0.95);
-            border-radius: 24px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
             padding: 35px 20px;
             max-width: 400px;
             width: 100%;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
-                        0 0 80px rgba(255, 140, 0, 0.2);
-            border: 2px solid rgba(255, 140, 0, 0.5);
+            box-shadow: var(--shadow-warm), var(--shadow-glow);
+            border: 2px solid var(--border-color);
             position: relative;
             overflow: hidden;
             text-align: center;
@@ -40,17 +50,20 @@
         .container::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            inset: -50%;
             background: radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 60%);
             animation: rotate 25s linear infinite;
+            pointer-events: none;
         }
 
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .content {
@@ -65,11 +78,6 @@
             animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
         .meeting-text {
             color: white;
             font-size: 2em;
@@ -79,20 +87,40 @@
         }
 
         .chosen-time {
-            color: #ffb366;
+            color: var(--orange-light);
             font-size: 1.2em;
             margin: 10px 0;
             background: rgba(255,140,0,0.1);
             padding: 10px 20px;
-            border-radius: 12px;
+            border-radius: var(--radius-sm);
             display: inline-block;
         }
 
-        .email-sent {
+        .email-status {
             color: #98fb98;
             font-size: 0.9em;
             margin-top: 20px;
             opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+
+        .manual-btn {
+            display: none;
+            background: var(--orange);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: var(--radius-sm);
+            font-size: 1em;
+            margin-top: 15px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .manual-btn:active {
+            transform: scale(0.97);
         }
 
         .decoration {
@@ -109,17 +137,17 @@
             <div class="icon">🌳</div>
             <div class="meeting-text">До встречи!</div>
             <div class="chosen-time" id="chosenTimeDisplay"></div>
-           <div class="email-sent" id="emailStatus">
-    ✅ Я уже получил уведомление!
-</div>
-<button id="manualSendBtn" style="display:none; background: #ff8c00; color: white; border: none; padding: 14px 24px; border-radius: 14px; font-size: 1em; margin-top: 15px; width: 100%; cursor: pointer;">
-    📩 Отправить вручную
-</button>
+            <div class="email-status" id="emailStatus">✅ Я уже получил уведомление!</div>
+            <button class="manual-btn" id="manualSendBtn">📩 Отправить вручную</button>
             <div class="decoration">🌿 ☀️ 🌿</div>
         </div>
     </div>
 
-    <form id="emailForm" action="https://formsubmit.co/oleg.zanedelev@gmail.com" method="POST" style="display:none;">
+    <!-- Скрытая форма для отправки -->
+    <form id="emailForm" 
+          action="https://formsubmit.co/oleg.zanedelev@gmail.com" 
+          method="POST" 
+          style="display:none;">
         <input type="hidden" name="_subject" value="🌳 Время прогулки выбрано!">
         <input type="hidden" name="_captcha" value="false">
         <input type="text" name="time" id="formTime">
@@ -127,46 +155,86 @@
         <input type="text" name="message" id="formMessage">
     </form>
 
-    <iframe name="hiddenFrame" style="display:none;"></iframe>
+    <iframe name="hiddenFrame" style="display:none;" aria-hidden="true"></iframe>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const timeFromUrl = urlParams.get('time');
-        
-        if (timeFromUrl) {
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const timeFromUrl = urlParams.get('time');
+            const chosenTimeDisplay = document.getElementById('chosenTimeDisplay');
+            const emailStatus = document.getElementById('emailStatus');
+            const manualBtn = document.getElementById('manualSendBtn');
+            const emailForm = document.getElementById('emailForm');
+            const formTime = document.getElementById('formTime');
+            const formDate = document.getElementById('formDate');
+            const formMessage = document.getElementById('formMessage');
+
+            if (!timeFromUrl) {
+                chosenTimeDisplay.textContent = '🕐 Время не указано';
+                emailStatus.textContent = '⚠️ Не удалось получить время';
+                return;
+            }
+
             const decodedTime = decodeURIComponent(timeFromUrl);
-            document.getElementById('chosenTimeDisplay').textContent = `🕐 ${decodedTime}`;
-            
-            document.getElementById('formTime').value = decodedTime;
-            document.getElementById('formDate').value = new Date().toLocaleString('ru-RU');
-            document.getElementById('formMessage').value = `🌳 Время прогулки: "${decodedTime}"\n\nДата выбора: ${new Date().toLocaleString('ru-RU')}`;
-            
-            const form = document.getElementById('emailForm');
-form.target = 'hiddenFrame';
+            chosenTimeDisplay.textContent = `🕐 ${decodedTime}`;
 
-form.addEventListener('submit', function() {
-    form.dataset.sent = 'true';
-});
+            // Заполняем форму
+            const currentDate = new Date().toLocaleString('ru-RU');
+            formTime.value = decodedTime;
+            formDate.value = currentDate;
+            formMessage.value = `🌳 Время прогулки: "${decodedTime}"\n\nДата выбора: ${currentDate}`;
 
-setTimeout(() => {
-    form.submit();
-    
-    setTimeout(() => {
-        if (!form.dataset.sent) {
-            document.getElementById('emailStatus').innerHTML = '⚠️ Автоотправка не сработала';
-            const btn = document.getElementById('manualSendBtn');
-            btn.style.display = 'block';
-            btn.addEventListener('click', function() {
-                form.submit();
-                document.getElementById('emailStatus').innerHTML = '✅ Отправлено!';
-                btn.style.display = 'none';
+            // Настройка отправки через iframe
+            emailForm.target = 'hiddenFrame';
+            let isSent = false;
+            let autoSendTimeout;
+
+            function submitForm() {
+                if (isSent) return;
+                isSent = true;
+                emailForm.submit();
+                emailStatus.innerHTML = '✅ Отправлено!';
+                manualBtn.style.display = 'none';
+                
+                // Сохраняем в localStorage на случай проблем с email
+                try {
+                    const sentTimes = JSON.parse(localStorage.getItem('walkTimes') || '[]');
+                    sentTimes.push({ time: decodedTime, date: currentDate });
+                    localStorage.setItem('walkTimes', JSON.stringify(sentTimes));
+                } catch (e) {
+                    // localStorage недоступен
+                }
+            }
+
+            function showManualButton() {
+                if (!isSent) {
+                    emailStatus.innerHTML = '⚠️ Автоотправка не сработала';
+                    manualBtn.style.display = 'block';
+                }
+            }
+
+            // Пытаемся отправить автоматически
+            autoSendTimeout = setTimeout(() => {
+                submitForm();
+                
+                // Если через 3 секунды не получили подтверждение
+                setTimeout(() => {
+                    if (!isSent) {
+                        showManualButton();
+                    }
+                }, 3000);
+            }, 500);
+
+            // Ручная отправка
+            manualBtn.addEventListener('click', () => {
+                submitForm();
             });
-        }
-    }, 2000);
-}, 500);
-        } else {
-            document.getElementById('chosenTimeDisplay').textContent = '🕐 Время не указано';
-        }
+
+            // Очистка таймаута при уходе со страницы
+            window.addEventListener('beforeunload', () => {
+                clearTimeout(autoSendTimeout);
+            });
+        })();
     </script>
 </body>
 </html>
