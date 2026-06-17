@@ -3,116 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>До встречи!</title>
+    <title>До встречи! 🌳</title>
     <style>
         :root {
             --orange: #ff8c00;
             --orange-light: #ffb366;
-            --card-bg: rgba(25, 25, 45, 0.95);
-            --shadow-warm: 0 20px 50px rgba(0, 0, 0, 0.4);
-            --shadow-glow: 0 0 80px rgba(255, 140, 0, 0.2);
-            --border-color: rgba(255, 140, 0, 0.5);
-            --radius: 24px;
-            --radius-sm: 12px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             padding: 15px;
-            -webkit-font-smoothing: antialiased;
+            background: #0a0a1a;
             overflow: hidden;
         }
 
-        /* Звёзды */
-        .stars {
+        .animated-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
             z-index: 0;
+            background: linear-gradient(45deg, #1a1a0a, #1a0a0a, #0a1a0a, #0a0a1a);
+            background-size: 400% 400%;
+            animation: gradientShift 10s ease infinite;
         }
 
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle var(--duration) ease-in-out infinite;
-            animation-delay: var(--delay);
-            opacity: 0;
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.5); }
-        }
-
-        /* Конфетти */
-        .confetti-container {
+        /* Фейерверки */
+        .firework {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
             pointer-events: none;
-            z-index: 1;
+            z-index: 2;
         }
 
-        .confetti {
+        .spark {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            animation: confetti-fall var(--duration) ease-in-out infinite;
-            animation-delay: var(--delay);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: sparkBurst 1.5s ease-out forwards;
         }
 
-        @keyframes confetti-fall {
+        @keyframes sparkBurst {
             0% {
-                transform: translateY(-100%) rotate(0deg);
+                transform: translate(0, 0) scale(1);
                 opacity: 1;
             }
             100% {
-                transform: translateY(100vh) rotate(720deg);
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Конфетти */
+        .confetti-piece {
+            position: fixed;
+            pointer-events: none;
+            z-index: 3;
+            animation: confettiFall var(--duration) linear infinite;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(var(--spin));
                 opacity: 0;
             }
         }
 
         .container {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 35px 20px;
-            max-width: 400px;
+            background: rgba(20, 20, 40, 0.85);
+            border-radius: 30px;
+            padding: 40px 25px;
+            max-width: 420px;
             width: 100%;
-            box-shadow: 
-                var(--shadow-warm), 
-                var(--shadow-glow),
-                inset 0 1px 0 rgba(255,255,255,0.05);
-            border: 2px solid var(--border-color);
             position: relative;
-            overflow: hidden;
+            z-index: 10;
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            box-shadow: 
+                0 0 50px rgba(255, 140, 0, 0.3),
+                0 0 100px rgba(255, 100, 0, 0.15),
+                0 20px 60px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
             text-align: center;
-            z-index: 2;
-            backdrop-filter: blur(10px);
-            animation: card-appear 0.8s ease-out;
+            animation: cardPopIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes card-appear {
+        @keyframes cardPopIn {
             0% {
                 opacity: 0;
-                transform: scale(0.9) translateY(20px);
+                transform: scale(0.8) translateY(30px);
             }
             100% {
                 opacity: 1;
@@ -120,56 +120,30 @@
             }
         }
 
-        .container::before {
-            content: '';
+        .glow-border {
             position: absolute;
-            inset: -50%;
-            background: 
-                radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 60%),
-                radial-gradient(circle at 30% 70%, rgba(255,200,0,0.05) 0%, transparent 50%);
-            animation: rotate 25s linear infinite;
-            pointer-events: none;
-        }
-
-        .container::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: var(--radius);
-            padding: 2px;
-            background: linear-gradient(
-                45deg,
-                transparent 30%,
-                rgba(255,140,0,0.3) 50%,
-                transparent 70%
+            inset: -3px;
+            border-radius: 33px;
+            padding: 3px;
+            background: conic-gradient(
+                from 0deg,
+                transparent,
+                rgba(255, 140, 0, 0.6),
+                rgba(255, 200, 0, 0.6),
+                rgba(255, 140, 0, 0.6),
+                transparent
             );
             mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
-            animation: border-glow 3s ease-in-out infinite;
+            animation: spinGlow 4s linear infinite;
             pointer-events: none;
         }
 
-        @keyframes border-glow {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes celebrate {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+        @keyframes spinGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .content {
@@ -178,32 +152,57 @@
         }
 
         .icon {
-            font-size: 55px;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 0 15px rgba(255,140,0,0.6));
-            animation: celebrate 0.6s ease-out 0.3s, float 3s ease-in-out 1s infinite;
+            font-size: 70px;
             display: inline-block;
+            animation: celebrateIcon 0.8s ease-out, floatIcon 3s ease-in-out 0.8s infinite;
+            filter: drop-shadow(0 0 30px rgba(255, 140, 0, 0.8));
+        }
+
+        @keyframes celebrateIcon {
+            0% { transform: scale(0) rotate(-180deg); }
+            60% { transform: scale(1.3) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
         }
 
         .meeting-text {
-            color: white;
-            font-size: 2em;
-            margin: 15px 0;
-            text-shadow: 
-                0 0 20px rgba(255,140,0,0.5),
-                0 0 40px rgba(255,140,0,0.2);
-            font-weight: bold;
-            animation: fade-in-up 0.6s ease-out 0.5s both;
-            background: linear-gradient(to right, #ffffff, #ffb366);
+            font-size: 2.5em;
+            font-weight: 900;
+            margin: 20px 0;
+            background: linear-gradient(to right, #ffffff, #ffb366, #ff8c00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-shadow: none;
+            animation: textShine 2s ease-in-out infinite;
         }
 
-        @keyframes fade-in-up {
+        @keyframes textShine {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .chosen-time {
+            color: #ffb366;
+            font-size: 1.3em;
+            margin: 15px 0;
+            padding: 15px 25px;
+            background: rgba(255, 140, 0, 0.1);
+            border-radius: 15px;
+            display: inline-block;
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            backdrop-filter: blur(10px);
+            animation: fadeSlideUp 0.6s ease-out 0.5s both;
+        }
+
+        @keyframes fadeSlideUp {
             0% {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px);
             }
             100% {
                 opacity: 1;
@@ -211,81 +210,81 @@
             }
         }
 
-        .chosen-time {
-            color: var(--orange-light);
-            font-size: 1.2em;
-            margin: 10px 0;
-            background: rgba(255,140,0,0.1);
-            padding: 10px 20px;
-            border-radius: var(--radius-sm);
-            display: inline-block;
-            animation: fade-in-up 0.6s ease-out 0.7s both;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,140,0,0.2);
-        }
-
         .email-status {
-            color: #98fb98;
-            font-size: 0.9em;
-            margin-top: 20px;
-            opacity: 0.9;
-            transition: all 0.3s ease;
-            animation: fade-in-up 0.6s ease-out 0.9s both;
+            color: #7fff7f;
+            font-size: 1em;
+            margin-top: 25px;
+            padding: 12px 20px;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 12px;
+            display: inline-block;
+            animation: fadeSlideUp 0.6s ease-out 0.7s both;
         }
 
         .manual-btn {
             display: none;
-            background: var(--orange);
+            background: linear-gradient(135deg, #ff8c00, #ff4500);
             color: white;
             border: none;
-            padding: 14px 24px;
-            border-radius: var(--radius-sm);
-            font-size: 1em;
-            margin-top: 15px;
+            padding: 16px 30px;
+            border-radius: 16px;
+            font-size: 1.1em;
+            margin-top: 20px;
             width: 100%;
             cursor: pointer;
-            transition: all 0.3s ease;
             font-family: inherit;
-            box-shadow: 0 5px 20px rgba(255,140,0,0.3);
+            font-weight: 700;
+            box-shadow: 0 8px 30px rgba(255, 69, 0, 0.4);
+            transition: all 0.3s ease;
         }
 
         .manual-btn:active {
-            transform: scale(0.97);
+            transform: scale(0.95);
         }
 
         .decoration {
-            font-size: 22px;
-            margin-top: 15px;
-            opacity: 0.7;
-            letter-spacing: 8px;
-            animation: float 4s ease-in-out infinite;
-            animation-delay: 1.2s;
+            font-size: 28px;
+            margin-top: 25px;
+            opacity: 0.6;
+            letter-spacing: 12px;
+        }
+
+        .decoration span {
+            display: inline-block;
+            animation: floatDecor 3s ease-in-out infinite;
+        }
+
+        .decoration span:nth-child(2) { animation-delay: 0.4s; }
+        .decoration span:nth-child(3) { animation-delay: 0.8s; }
+
+        @keyframes floatDecor {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
         }
     </style>
 </head>
 <body>
-    <!-- Звёзды -->
-    <div class="stars" id="stars"></div>
-    
-    <!-- Конфетти -->
-    <div class="confetti-container" id="confetti"></div>
+    <div class="animated-bg"></div>
+    <div id="fireworksContainer"></div>
+    <div id="confettiContainer"></div>
 
     <div class="container">
+        <div class="glow-border"></div>
         <div class="content">
             <div class="icon">🌳</div>
             <div class="meeting-text">До встречи!</div>
             <div class="chosen-time" id="chosenTimeDisplay"></div>
             <div class="email-status" id="emailStatus">✅ Я уже получил уведомление!</div>
             <button class="manual-btn" id="manualSendBtn">📩 Отправить вручную</button>
-            <div class="decoration">🌿 ☀️ 🌿</div>
+            <div class="decoration">
+                <span>🌿</span>
+                <span>☀️</span>
+                <span>🌿</span>
+            </div>
         </div>
     </div>
 
-    <!-- Скрытая форма -->
-    <form id="emailForm" 
-          action="https://formsubmit.co/oleg.zanedelev@gmail.com" 
-          method="POST" 
-          style="display:none;">
+    <form id="emailForm" action="https://formsubmit.co/oleg.zanedelev@gmail.com" method="POST" style="display:none;">
         <input type="hidden" name="_subject" value="🌳 Время прогулки выбрано!">
         <input type="hidden" name="_captcha" value="false">
         <input type="text" name="time" id="formTime">
@@ -293,50 +292,72 @@
         <input type="text" name="message" id="formMessage">
     </form>
 
-    <iframe name="hiddenFrame" style="display:none;" aria-hidden="true"></iframe>
+    <iframe name="hiddenFrame" style="display:none;"></iframe>
 
     <script>
-        // Генерация звёзд
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            const count = 50;
+        // Фейерверки
+        function createFirework(x, y) {
+            const colors = ['#ff8c00', '#ff6347', '#ffd700', '#ff4500', '#ff1493', '#00ff7f', '#ffb366'];
+            const container = document.getElementById('fireworksContainer');
             
-            for (let i = 0; i < count; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.width = (Math.random() * 3 + 1) + 'px';
-                star.style.height = star.style.width;
-                star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-                star.style.setProperty('--delay', Math.random() * 3 + 's');
-                starsContainer.appendChild(star);
+            for (let i = 0; i < 30; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'spark';
+                spark.style.left = x + 'px';
+                spark.style.top = y + 'px';
+                spark.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                const angle = (Math.PI * 2 * i) / 30;
+                const distance = 50 + Math.random() * 100;
+                spark.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+                spark.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+                
+                container.appendChild(spark);
+                
+                setTimeout(() => spark.remove(), 1500);
             }
         }
 
-        // Генерация конфетти
+        // Запуск фейерверков
+        function launchFireworks() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight * 0.6;
+                    createFirework(x, y);
+                }, i * 600);
+            }
+        }
+
+        // Конфетти
         function createConfetti() {
-            const confettiContainer = document.getElementById('confetti');
-            const colors = ['#ff8c00', '#ff6347', '#ffb366', '#ffd700', '#ff4500', '#ff1493', '#00ff7f'];
-            const count = 50;
+            const colors = ['#ff8c00', '#ff6347', '#ffd700', '#ff4500', '#ff1493', '#ffb366', '#ff69b4', '#00ff7f'];
+            const container = document.getElementById('confettiContainer');
             
-            for (let i = 0; i < count; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.top = -(Math.random() * 20) + '%';
-                confetti.style.width = (Math.random() * 8 + 4) + 'px';
-                confetti.style.height = (Math.random() * 8 + 4) + 'px';
-                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-                confetti.style.setProperty('--duration', (Math.random() * 3 + 3) + 's');
-                confetti.style.setProperty('--delay', Math.random() * 2 + 's');
-                confettiContainer.appendChild(confetti);
+            for (let i = 0; i < 60; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.width = (Math.random() * 10 + 5) + 'px';
+                piece.style.height = (Math.random() * 10 + 5) + 'px';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                piece.style.setProperty('--duration', (Math.random() * 3 + 4) + 's');
+                piece.style.setProperty('--delay', Math.random() * 3 + 's');
+                piece.style.setProperty('--spin', (Math.random() * 720 - 360) + 'deg');
+                container.appendChild(piece);
             }
         }
 
-        createStars();
+        launchFireworks();
         createConfetti();
+
+        // Повторяем фейерверки
+        setInterval(() => {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight * 0.5;
+            createFirework(x, y);
+        }, 3000);
 
         // Логика отправки
         (function() {
@@ -346,27 +367,21 @@
             const emailStatus = document.getElementById('emailStatus');
             const manualBtn = document.getElementById('manualSendBtn');
             const emailForm = document.getElementById('emailForm');
-            const formTime = document.getElementById('formTime');
-            const formDate = document.getElementById('formDate');
-            const formMessage = document.getElementById('formMessage');
 
             if (!timeFromUrl) {
                 chosenTimeDisplay.textContent = '🕐 Время не указано';
-                emailStatus.textContent = '⚠️ Не удалось получить время';
                 return;
             }
 
             const decodedTime = decodeURIComponent(timeFromUrl);
             chosenTimeDisplay.textContent = `🕐 ${decodedTime}`;
 
-            const currentDate = new Date().toLocaleString('ru-RU');
-            formTime.value = decodedTime;
-            formDate.value = currentDate;
-            formMessage.value = `🌳 Время прогулки: "${decodedTime}"\n\nДата выбора: ${currentDate}`;
+            document.getElementById('formTime').value = decodedTime;
+            document.getElementById('formDate').value = new Date().toLocaleString('ru-RU');
+            document.getElementById('formMessage').value = `🌳 Время: "${decodedTime}"\nДата: ${new Date().toLocaleString('ru-RU')}`;
 
             emailForm.target = 'hiddenFrame';
             let isSent = false;
-            let autoSendTimeout;
 
             function submitForm() {
                 if (isSent) return;
@@ -374,30 +389,19 @@
                 emailForm.submit();
                 emailStatus.innerHTML = '✅ Отправлено!';
                 manualBtn.style.display = 'none';
-                
-                try {
-                    const sentTimes = JSON.parse(localStorage.getItem('walkTimes') || '[]');
-                    sentTimes.push({ time: decodedTime, date: currentDate });
-                    localStorage.setItem('walkTimes', JSON.stringify(sentTimes));
-                } catch (e) {}
             }
 
-            function showManualButton() {
-                if (!isSent) {
-                    emailStatus.innerHTML = '⚠️ Автоотправка не сработала';
-                    manualBtn.style.display = 'block';
-                }
-            }
-
-            autoSendTimeout = setTimeout(() => {
+            setTimeout(() => {
                 submitForm();
                 setTimeout(() => {
-                    if (!isSent) showManualButton();
+                    if (!isSent) {
+                        emailStatus.innerHTML = '⚠️ Не отправилось автоматически';
+                        manualBtn.style.display = 'block';
+                    }
                 }, 3000);
             }, 500);
 
             manualBtn.addEventListener('click', submitForm);
-            window.addEventListener('beforeunload', () => clearTimeout(autoSendTimeout));
         })();
     </script>
 </body>
